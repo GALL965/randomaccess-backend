@@ -11,4 +11,4 @@ RUN chmod +x mvnw && ./mvnw package -DskipTests
 
 EXPOSE 8080
 
-CMD ["java", "-jar", "target/*.jar"]
+CMD ["java", "-jar", "target/randomaccess-backend-0.0.1-SNAPSHOT.jar"]
