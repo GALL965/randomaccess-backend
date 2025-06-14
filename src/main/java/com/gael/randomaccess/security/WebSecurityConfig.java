@@ -1,5 +1,6 @@
 package com.gael.randomaccess.security;
 import org.springframework.http.HttpMethod;
+import java.util.List;
 
 import com.gael.randomaccess.security.jwt.JwtFilter;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,15 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
+
+                    .cors(cors -> cors.configurationSource(request -> {
+    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+    corsConfig.setAllowedOrigins(List.of("*")); // puedes reemplazar * por tu frontend en producción
+    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    corsConfig.setAllowedHeaders(List.of("*"));
+    return corsConfig;
+}))
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
