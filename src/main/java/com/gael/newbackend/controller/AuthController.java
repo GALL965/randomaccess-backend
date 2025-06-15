@@ -19,8 +19,10 @@ public ResponseEntity<?> register(@RequestBody User user) {
         return ResponseEntity.badRequest().body("Email ya registrado");
     }
 
-    // Asignar rol por defecto
-    user.getRoles().add("USER");
+// Evita error por roles nulos
+    if (user.getRoles() == null || user.getRoles().isEmpty()) {
+        user.getRoles().add("USER");
+    }
 
     userRepository.save(user);
     return ResponseEntity.ok("Usuario registrado");
