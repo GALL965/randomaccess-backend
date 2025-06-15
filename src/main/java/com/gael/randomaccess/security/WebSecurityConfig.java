@@ -20,13 +20,15 @@ public class WebSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         return http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(request -> {
-                var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-                corsConfig.setAllowedOrigins(List.of("*")); // ⚠️ En producción, especifica tu dominio frontend
-                corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                corsConfig.setAllowedHeaders(List.of("*"));
-                return corsConfig;
-            }))
+             .cors(cors -> cors.configurationSource(request -> {
+    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+    corsConfig.setAllowedOrigins(List.of("*")); // o tu frontend si ya tienes uno definido
+    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+    corsConfig.setAllowedHeaders(List.of("*"));
+    corsConfig.setAllowCredentials(true); // ✅ permite envío de credenciales si es necesario
+    return corsConfig;
+}))
+
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
