@@ -26,15 +26,17 @@ public class WebSecurityConfig {
             .csrf(csrf -> csrf.disable())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/posts/**").permitAll()
-                .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/comments").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/api/comments/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/api/comments/**").permitAll()
-                .anyRequest().authenticated()
-            )
+                 .authorizeHttpRequests(auth -> auth
+    .requestMatchers("/api/auth/**").permitAll()
+    .requestMatchers("/api/posts/**").permitAll()
+    .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+    .requestMatchers(HttpMethod.POST, "/api/comments").authenticated()
+    .requestMatchers(HttpMethod.PUT, "/api/comments/**").authenticated()
+    .requestMatchers(HttpMethod.DELETE, "/api/comments/**").permitAll()
+    .anyRequest().authenticated()
+)
+
+
             .exceptionHandling(e -> e
                 .authenticationEntryPoint((request, response, authException) ->
                     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized"))
