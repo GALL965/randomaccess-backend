@@ -42,3 +42,4 @@ public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) t
 
     return http.build();
 }
+}
