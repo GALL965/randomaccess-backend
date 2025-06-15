@@ -1,10 +1,11 @@
 package com.gael.newbackend.controller;
-import java.util.Map;
+
 import com.gael.newbackend.model.User;
 import com.gael.newbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
