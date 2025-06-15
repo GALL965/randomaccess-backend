@@ -13,14 +13,17 @@ public class AuthController {
 
     @Autowired
     private UserRepository userRepository;
-
-    @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody User user) {
-        if (userRepository.existsByEmail(user.getEmail())) {
-            return ResponseEntity.badRequest().body("Email ya registrado");
-        }
-
-        userRepository.save(user);
-        return ResponseEntity.ok("Usuario registrado");
+@PostMapping("/register")
+public ResponseEntity<?> register(@RequestBody User user) {
+    if (userRepository.existsByEmail(user.getEmail())) {
+        return ResponseEntity.badRequest().body("Email ya registrado");
     }
+
+    // Asignar rol por defecto
+    user.getRoles().add("USER");
+
+    userRepository.save(user);
+    return ResponseEntity.ok("Usuario registrado");
+}
+
 }
