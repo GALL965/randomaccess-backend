@@ -20,13 +20,19 @@ public class PostController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping("/")
-    public Post createPost(@RequestBody Post post, @RequestParam String username) {
-        User user = userRepository.findByUsername(username).orElseThrow();
-        post.setUser(user);
-        post.setCreatedAt(LocalDateTime.now());
-        return postRepository.save(post);
-    }
+@PostMapping("/")
+public Post createPost(@RequestBody Map<String, String> data) {
+    User user = userRepository.findByUsername(data.get("username")).orElseThrow();
+
+    Post post = new Post();
+    post.setTitle(data.get("title"));
+    post.setDescription(data.get("description"));
+    post.setImageUrl(data.get("imageUrl"));
+    post.setUser(user);
+    post.setCreatedAt(LocalDateTime.now());
+
+    return postRepository.save(post);
+}
 
     @GetMapping("/")
     public List<Post> getAllPosts() {

@@ -8,9 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "posts")
 public class Post {
 
-    @ManyToOne
+@JsonIgnoreProperties({"email", "password", "roles"})
+@ManyToOne
 @JoinColumn(name = "user_id")
-@JsonIgnore // ⬅️ aquí
 private User user;
 
 
