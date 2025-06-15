@@ -1,5 +1,6 @@
 package com.gael.randomaccess.security;
 
+import com.gael.randomaccess.security.jwt.JwtFilter;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
