@@ -16,37 +16,29 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 @Configuration
 public class WebSecurityConfig {
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
-        return http
-            .csrf(csrf -> csrf.disable())
-             .cors(cors -> cors.configurationSource(request -> {
-    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-    corsConfig.setAllowedOrigins(List.of("*")); // o tu frontend si ya tienes uno definido
-    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    corsConfig.setAllowedHeaders(List.of("*"));
-    corsConfig.setAllowCredentials(true); // ✅ permite envío de credenciales si es necesario
-    return corsConfig;
-}))
+@Bean
+public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
+    http
+        .csrf(csrf -> csrf.disable())
+        .cors(cors -> cors.configurationSource(request -> {
+            org.springframework.web.cors.CorsConfiguration config = new org.springframework.web.cors.CorsConfiguration();
+            config.setAllowedOrigins(List.of("*")); // Reemplaza por tu frontend si es necesario
+            config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+            config.setAllowedHeaders(List.of("*"));
+            config.setAllowCredentials(true); // 🔥 CLAVE para que funcione el preflight
+            return config;
+        }))
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/api/auth/**").permitAll()
+            .requestMatchers("/api/posts/**").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/comments").authenticated()
+            .requestMatchers(HttpMethod.PUT, "/api/comments/**").authenticated()
+            .requestMatchers(HttpMethod.DELETE, "/api/comments/**").permitAll()
+            .anyRequest().authenticated()
+        )
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/posts/**").permitAll()
-
-                .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/comments").authenticated()
-                .requestMatchers(HttpMethod.PUT, "/api/comments/**").authenticated()
-                .requestMatchers(HttpMethod.DELETE, "/api/comments/**").permitAll()
-
-                .anyRequest().authenticated()
-            )
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-            .build();
-    }
-
-    @Bean
-    public AuthenticationManager authManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
+    return http.build();
 }
