@@ -31,4 +31,28 @@ return ResponseEntity.ok(Map.of("message", "Usuario registrado"));
 
 }
 
+
+@PostMapping("/login")
+public ResponseEntity<?> login(@RequestBody Map<String, String> loginData) {
+    String email = loginData.get("email");
+    String password = loginData.get("password");
+
+Optional<User> optionalUser = userRepository.findByEmail(email);
+if (optionalUser.isEmpty()) {
+    return ResponseEntity.status(401).body("Usuario no encontrado");
+}
+User user = optionalUser.get();
+
+    if (!user.getPassword().equals(password)) {
+        return ResponseEntity.status(401).body("Contraseña incorrecta");
+    }
+
+    return ResponseEntity.ok(Map.of(
+        "message", "Login exitoso",
+        "username", user.getUsername(),
+        "email", user.getEmail()
+    ));
+}
+
+
 }
