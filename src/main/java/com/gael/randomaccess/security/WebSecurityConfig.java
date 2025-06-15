@@ -19,31 +19,28 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, JwtFilter jwtFilter) throws Exception {
         return http
-                .csrf(csrf -> csrf.disable())
+            .csrf(csrf -> csrf.disable())
+            .cors(cors -> cors.configurationSource(request -> {
+                var corsConfig = new org.springframework.web.cors.CorsConfiguration();
+                corsConfig.setAllowedOrigins(List.of("*")); // ⚠️ En producción, especifica tu dominio frontend
+                corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                corsConfig.setAllowedHeaders(List.of("*"));
+                return corsConfig;
+            }))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/api/posts/**").permitAll()
 
-                    .cors(cors -> cors.configurationSource(request -> {
-    var corsConfig = new org.springframework.web.cors.CorsConfiguration();
-    corsConfig.setAllowedOrigins(List.of("*")); // puedes reemplazar * por tu frontend en producción
-    corsConfig.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-    corsConfig.setAllowedHeaders(List.of("*"));
-    return corsConfig;
-}))
+                .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
+                .requestMatchers(HttpMethod.POST, "/api/comments").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/comments/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/comments/**").permitAll()
 
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                       .requestMatchers(HttpMethod.GET, "/api/comments/**").permitAll()
-.requestMatchers(HttpMethod.POST, "/api/comments").authenticated()
-.requestMatchers(HttpMethod.DELETE, "/api/comments/**").permitAll() 
-
-
-.requestMatchers(HttpMethod.PUT, "/api/comments/**").authenticated()
-
-                        .requestMatchers("/api/posts/**").permitAll() 
-                        .anyRequest().authenticated()
-                )
-                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
-                .build();
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+            .build();
     }
 
     @Bean
@@ -51,5 +48,3 @@ public class WebSecurityConfig {
         return config.getAuthenticationManager();
     }
 }
-
-
