@@ -1,4 +1,4 @@
-package com.gael.randomaccess.model;
+package com.gael.newbackend.model;
 
 import jakarta.persistence.*;
 import java.util.HashSet;

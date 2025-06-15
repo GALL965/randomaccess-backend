@@ -1,5 +1,5 @@
-package com.gael.randomaccess.model;
-import com.gael.randomaccess.model.User;
+package com.gael.newbackend.model;
+import com.gael.newbackend.model.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 

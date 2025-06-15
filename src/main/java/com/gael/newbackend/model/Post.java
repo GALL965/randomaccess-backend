@@ -1,4 +1,4 @@
-package com.gael.randomaccess.model;
+package com.gael.newbackend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;

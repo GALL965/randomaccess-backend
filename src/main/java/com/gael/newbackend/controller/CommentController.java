@@ -1,11 +1,11 @@
-package com.gael.randomaccess.controller;
+package com.gael.newbackend.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
-import com.gael.randomaccess.model.Comment;
-import com.gael.randomaccess.repository.CommentRepository;
-import com.gael.randomaccess.repository.PostRepository;
-import com.gael.randomaccess.repository.UserRepository;
+import com.gael.newbackend.model.Comment;
+import com.gael.newbackend.repository.CommentRepository;
+import com.gael.newbackend.repository.PostRepository;
+import com.gael.newbackend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import jakarta.annotation.PostConstruct;

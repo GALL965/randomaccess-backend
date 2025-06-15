@@ -1,4 +1,4 @@
-package com.gael.randomaccess.controller;
+package com.gael.newbackend.controller;
 
 public class CommentRequest {
     private String content;

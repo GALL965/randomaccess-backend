@@ -1,10 +1,10 @@
-package com.gael.randomaccess;
+package com.gael.newbackend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class RandomaccessBackendApplicationTests {
+class NewbackendApplicationTests {
 
 	@Test
 	void contextLoads() {

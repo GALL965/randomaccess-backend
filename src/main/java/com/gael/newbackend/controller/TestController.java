@@ -1,4 +1,4 @@
-package com.gael.randomaccess.controller;
+package com.gael.newbackend.controller;
 
 import org.springframework.web.bind.annotation.*;
 

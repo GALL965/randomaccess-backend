@@ -1,9 +1,9 @@
-package com.gael.randomaccess.controller;
+package com.gael.newbackend.controller;
 
-import com.gael.randomaccess.model.Post;
-import com.gael.randomaccess.model.User;
-import com.gael.randomaccess.repository.PostRepository;
-import com.gael.randomaccess.repository.UserRepository;
+import com.gael.newbackend.model.Post;
+import com.gael.newbackend.model.User;
+import com.gael.newbackend.repository.PostRepository;
+import com.gael.newbackend.repository.UserRepository;
 import java.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,11 +1,11 @@
-package com.gael.randomaccess.repository;
+package com.gael.newbackend.repository;
 
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.gael.randomaccess.model.User;
+import com.gael.newbackend.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
