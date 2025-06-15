@@ -1,4 +1,5 @@
 package com.gael.randomaccess.model;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -25,11 +26,6 @@ private User user;
     private String imageUrl;
 
    private LocalDateTime createdAt;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    @JsonIgnoreProperties({"password", "roles"})
-    private User user;
 
     // Getters y setters
     public Long getId() { return id; }
