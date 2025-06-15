@@ -30,12 +30,13 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
                                 FilterChain filterChain) throws ServletException, IOException {
     String path = request.getRequestURI();
 
-    // 🔒 Ignorar rutas públicas y OPTIONS (preflight)
-    if (path.startsWith("/api/auth/") || path.startsWith("/api/posts") || 
-        (request.getMethod().equals("OPTIONS"))) {
-        filterChain.doFilter(request, response);
-        return;
-    }
+if (path.startsWith("/api/auth")
+ || path.startsWith("/api/posts")
+ || (path.startsWith("/api/comments") && request.getMethod().equals("GET"))
+ || request.getMethod().equals("OPTIONS")) {
+    filterChain.doFilter(request, response);
+    return;
+}
 
     String header = request.getHeader("Authorization");
 
