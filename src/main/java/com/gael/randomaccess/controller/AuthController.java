@@ -36,10 +36,15 @@ public class AuthController {
 
 @PostMapping("/register")
 public ResponseEntity<?> register(@RequestBody User user) {
-userRepository.save(user);
+    if (userRepository.existsByEmail(user.getEmail())) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("Email ya registrado");
+    }
+
+    // Cifra la contraseña antes de guardar
+    user.setPassword(passwordEncoder.encode(user.getPassword()));
 
     userRepository.save(user);
-    return ResponseEntity.ok("User registered successfully");
+    return ResponseEntity.ok("Usuario registrado correctamente");
 }
 
 
