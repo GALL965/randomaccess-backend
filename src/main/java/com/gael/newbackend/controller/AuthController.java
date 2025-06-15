@@ -25,7 +25,8 @@ public ResponseEntity<?> register(@RequestBody User user) {
     }
 
     userRepository.save(user);
-    return ResponseEntity.ok("Usuario registrado");
+return ResponseEntity.ok(Map.of("message", "Usuario registrado"));
+
 }
 
 }
