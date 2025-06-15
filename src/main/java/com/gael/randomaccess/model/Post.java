@@ -7,6 +7,12 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @Table(name = "posts")
 public class Post {
 
+    @ManyToOne
+@JoinColumn(name = "user_id")
+@JsonIgnore // ⬅️ aquí
+private User user;
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
