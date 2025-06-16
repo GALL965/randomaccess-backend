@@ -2,6 +2,7 @@ package com.gael.newbackend.model;
 import com.gael.newbackend.model.User;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class Comment {
