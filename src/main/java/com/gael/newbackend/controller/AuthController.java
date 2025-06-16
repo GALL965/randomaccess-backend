@@ -39,10 +39,19 @@ return ResponseEntity.ok(Map.of("message", "Usuario registrado"));
 
 @PostMapping("/login")
 public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-    System.out.println(">>> Login request recibido: " + request.getEmail());
+    System.out.println(">>> Login request recibido: " + request);
+
+    if (request == null) {
+        System.out.println(">>> El cuerpo del request es null");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cuerpo inválido");
+    }
+
+    if (request.getEmail() == null || request.getPassword() == null) {
+        System.out.println(">>> Faltan campos: " + request.getEmail() + " / " + request.getPassword());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email o password faltantes");
+    }
 
     User user = userRepository.findByEmail(request.getEmail()).orElse(null);
-
     if (user == null) {
         System.out.println(">>> Usuario no encontrado con email: " + request.getEmail());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado");
@@ -61,8 +70,6 @@ public ResponseEntity<?> login(@RequestBody LoginRequest request) {
             .setExpiration(new Date(System.currentTimeMillis() + 86400000))
             .signWith(SignatureAlgorithm.HS256, "secreto123".getBytes())
             .compact();
-
-    System.out.println(">>> Login exitoso. Token generado.");
 
     return ResponseEntity.ok(Map.of("token", token));
 }
