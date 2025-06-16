@@ -14,13 +14,14 @@ public class UploadController {
     @Autowired
     private CloudinaryService cloudinaryService;
 
-    @PostMapping
-    public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
-        try {
-            String url = cloudinaryService.upload(file);
-            return ResponseEntity.ok().body(url);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Error al subir imagen");
-        }
+@PostMapping
+public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
+    try {
+        String url = cloudinaryService.upload(file);
+        return ResponseEntity.ok().body(Map.of("url", url));
+    } catch (Exception e) {
+        return ResponseEntity.status(500).body(Map.of("error", "Error al subir imagen"));
     }
+}
+
 }
