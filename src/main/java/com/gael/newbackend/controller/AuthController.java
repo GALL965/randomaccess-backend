@@ -1,5 +1,10 @@
 package com.gael.newbackend.controller;
 
+import java.util.Date;
+import io.jsonwebtoken.SignatureAlgorithm;
+import com.gael.newbackend.controller.request.LoginRequest;
+import io.jsonwebtoken.Jwts;
+import org.springframework.http.HttpStatus;
 import java.util.Optional;
 import com.gael.newbackend.model.User;
 import com.gael.newbackend.repository.UserRepository;
