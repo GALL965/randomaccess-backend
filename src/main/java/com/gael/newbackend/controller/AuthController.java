@@ -39,7 +39,7 @@ return ResponseEntity.ok(Map.of("message", "Usuario registrado"));
 
 @PostMapping("/login")
 public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-    System.out.println(">>> Login request recibido: " + request);
+System.out.println(">>> Login request recibido: email=" + request.getEmail() + ", password=" + request.getPassword());
 
     if (request == null) {
         System.out.println(">>> El cuerpo del request es null");
