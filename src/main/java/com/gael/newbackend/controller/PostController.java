@@ -24,7 +24,7 @@ public class PostController {
 
 @PostMapping("/")
 public Post createPost(@RequestBody Map<String, String> data) {
-    User user = userRepository.findByUsername(data.get("username")).orElseThrow();
+User user = userRepository.findByEmail(data.get("username")).orElseThrow();
 
     Post post = new Post();
     post.setTitle(data.get("title"));
