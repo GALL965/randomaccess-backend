@@ -55,4 +55,16 @@ public void setComments(java.util.List<Comment> comments) {
 
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+private List<Reaction> reactions = new ArrayList<>();
+
+public List<Reaction> getReactions() {
+    return reactions;
+}
+public void setReactions(List<Reaction> reactions) {
+    this.reactions = reactions;
+}
+
+
 }
