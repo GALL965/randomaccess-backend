@@ -39,10 +39,18 @@ return ResponseEntity.ok(Map.of("message", "Usuario registrado"));
 
 @PostMapping("/login")
 public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    System.out.println(">>> Login request recibido: " + request.getEmail());
+
     User user = userRepository.findByEmail(request.getEmail()).orElse(null);
 
-    if (user == null || !user.getPassword().equals(request.getPassword())) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciales inválidas");
+    if (user == null) {
+        System.out.println(">>> Usuario no encontrado con email: " + request.getEmail());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado");
+    }
+
+    if (!user.getPassword().equals(request.getPassword())) {
+        System.out.println(">>> Contraseña inválida para usuario: " + user.getUsername());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
     }
 
     String token = Jwts.builder()
@@ -50,9 +58,11 @@ public ResponseEntity<?> login(@RequestBody LoginRequest request) {
             .claim("username", user.getUsername())
             .claim("email", user.getEmail())
             .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + 86400000)) // 1 día
+            .setExpiration(new Date(System.currentTimeMillis() + 86400000))
             .signWith(SignatureAlgorithm.HS256, "secreto123".getBytes())
             .compact();
+
+    System.out.println(">>> Login exitoso. Token generado.");
 
     return ResponseEntity.ok(Map.of("token", token));
 }
