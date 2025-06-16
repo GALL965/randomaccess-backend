@@ -15,6 +15,7 @@ public class Comment {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @ManyToOne
+    @JsonIgnoreProperties({"email", "password", "roles"})
     private User user;
 
     @ManyToOne
