@@ -39,39 +39,37 @@ return ResponseEntity.ok(Map.of("message", "Usuario registrado"));
 
 @PostMapping("/login")
 public ResponseEntity<?> login(@RequestBody LoginRequest request) {
-System.out.println(">>> Login request recibido: email=" + request.getEmail() + ", password=" + request.getPassword());
+    try {
+        System.out.println(">>> Login request recibido: email=" + request.getEmail());
 
-    if (request == null) {
-        System.out.println(">>> El cuerpo del request es null");
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Cuerpo inválido");
+        if (request == null || request.getEmail() == null || request.getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email o password faltantes");
+        }
+
+        User user = userRepository.findByEmail(request.getEmail()).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado");
+        }
+
+        if (!user.getPassword().equals(request.getPassword())) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
+        }
+
+        String token = Jwts.builder()
+                .setSubject(String.valueOf(user.getId()))
+                .claim("username", user.getUsername())
+                .claim("email", user.getEmail())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .signWith(SignatureAlgorithm.HS256, "secreto123".getBytes())
+                .compact();
+
+        return ResponseEntity.ok(Map.of("token", token));
+    } catch (Exception e) {
+        System.out.println(">>> ERROR en login: " + e.getMessage());
+        e.printStackTrace();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error interno en login");
     }
-
-    if (request.getEmail() == null || request.getPassword() == null) {
-        System.out.println(">>> Faltan campos: " + request.getEmail() + " / " + request.getPassword());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email o password faltantes");
-    }
-
-    User user = userRepository.findByEmail(request.getEmail()).orElse(null);
-    if (user == null) {
-        System.out.println(">>> Usuario no encontrado con email: " + request.getEmail());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Usuario no encontrado");
-    }
-
-    if (!user.getPassword().equals(request.getPassword())) {
-        System.out.println(">>> Contraseña inválida para usuario: " + user.getUsername());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Contraseña incorrecta");
-    }
-
-    String token = Jwts.builder()
-            .setSubject(String.valueOf(user.getId()))
-            .claim("username", user.getUsername())
-            .claim("email", user.getEmail())
-            .setIssuedAt(new Date())
-            .setExpiration(new Date(System.currentTimeMillis() + 86400000))
-            .signWith(SignatureAlgorithm.HS256, "secreto123".getBytes())
-            .compact();
-
-    return ResponseEntity.ok(Map.of("token", token));
 }
 
 
