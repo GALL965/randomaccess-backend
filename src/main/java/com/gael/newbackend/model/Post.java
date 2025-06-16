@@ -12,6 +12,17 @@ public class Post {
 @ManyToOne
 @JoinColumn(name = "user_id")
 private User user;
+@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+@JsonIgnoreProperties({"post", "user"})
+private java.util.List<Comment> comments = new java.util.ArrayList<>();
+
+public java.util.List<Comment> getComments() {
+    return comments;
+}
+
+public void setComments(java.util.List<Comment> comments) {
+    this.comments = comments;
+}
 
 
     @Id
