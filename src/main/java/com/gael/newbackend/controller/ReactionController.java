@@ -54,15 +54,6 @@ public class ReactionController {
     }
 
 
-@GetMapping("/count")
-public ResponseEntity<Map<String, Long>> getReactionCounts(@PathVariable Long postId) {
-    List<Object[]> result = reactionRepository.countReactionsByPostId(postId);
-    Map<String, Long> counts = new HashMap<>();
-    for (Object[] row : result) {
-        counts.put(row[0].toString(), (Long) row[1]);
-    }
-    return ResponseEntity.ok(counts);
-}
 
 
 }
