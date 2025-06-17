@@ -7,5 +7,5 @@ public enum EReaction {
     XDDD,
     WAOS,
     TITE,
-    NOJAO
+    EWWW
 }
