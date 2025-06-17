@@ -2,6 +2,7 @@
 package com.gael.newbackend.model;
 import java.util.List;
 import java.util.ArrayList;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
@@ -60,6 +61,7 @@ public void setComments(java.util.List<Comment> comments) {
     public User getUser() { return user; }
     public void setUser(User user) { this.user = user; }
 
+@JsonManagedReference
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
 private List<Reaction> reactions = new ArrayList<>();
 

@@ -1,4 +1,5 @@
 package com.gael.newbackend.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +15,8 @@ public class Reaction {
     private EReaction type;
 
     private LocalDateTime reactedAt;
-
+   
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
