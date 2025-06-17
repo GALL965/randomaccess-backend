@@ -1,5 +1,9 @@
 package com.gael.newbackend.repository;
 
+import java.util.List;
+import java.util.Map; // ← AÑADE ESTO
+import com.gael.newbackend.model.EReaction; // ← AÑADE ESTO
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import com.gael.newbackend.model.Reaction;
@@ -13,6 +17,8 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
 
 @Query("SELECT r.type AS reaction, COUNT(r) AS count FROM Reaction r WHERE r.post.id = :postId GROUP BY r.type")
 Map<EReaction, Long> countReactionsByPostId(@Param("postId") Long postId);
+
+void deleteByUserAndPost(User user, Post post);
 
 
 }
