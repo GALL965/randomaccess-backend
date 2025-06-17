@@ -4,7 +4,7 @@ public enum EReaction {
     LIKE,
     LOVE,
     XDDD,
-    WAO,
+    WAOS,
     TITE,
     NOJAO
 }
