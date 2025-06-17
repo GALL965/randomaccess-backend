@@ -16,6 +16,7 @@ import java.util.List;
 public interface ReactionRepository extends JpaRepository<Reaction, Long> {
     List<Reaction> findByPost(Post post);
 
+ Reaction findByUserAndPost(User user, Post post);
 @Query("SELECT r.type, COUNT(r) FROM Reaction r WHERE r.post.id = :postId GROUP BY r.type")
 List<Object[]> countReactionsByPostId(@Param("postId") Long postId);
 
