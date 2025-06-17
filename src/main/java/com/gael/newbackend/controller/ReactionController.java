@@ -23,15 +23,35 @@ public class ReactionController {
     private UserRepository userRepository;
 
 
-    @GetMapping
-    public ResponseEntity<List<Reaction>> getReactionsForPost(@PathVariable Long postId) {
-        Optional<Post> optionalPost = postRepository.findById(postId);
-        if (optionalPost.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        List<Reaction> reactions = reactionRepository.findByPost(optionalPost.get());
-        return ResponseEntity.ok(reactions);
+@PostMapping
+public ResponseEntity<?> reactToPost(@PathVariable Long postId, @RequestBody Map<String, String> data) {
+    String username = data.get("username");
+    String reactionType = data.get("reaction");
+
+    User user = userRepository.findByEmail(username).orElseThrow();
+    Post post = postRepository.findById(postId).orElseThrow();
+
+    // Verificar si ya existe una reacción
+    Reaction existingReaction = reactionRepository.findByUserAndPost(user, post);
+    if (existingReaction != null && existingReaction.getType().toString().equals(reactionType)) {
+        // Si la reacción ya existe y es la misma, eliminarla
+        reactionRepository.delete(existingReaction);
+        return ResponseEntity.ok().body("Reacción eliminada.");
     }
+
+    // Si no existe, agregar una nueva
+    if (existingReaction != null) {
+        reactionRepository.delete(existingReaction); // Si tiene otra reacción, la elimina
+    }
+
+    Reaction newReaction = new Reaction();
+    newReaction.setPost(post);
+    newReaction.setUser(user);
+    newReaction.setType(EReaction.valueOf(reactionType));
+
+    reactionRepository.save(newReaction);
+    return ResponseEntity.ok().body("Reacción registrada.");
+}
 
 
 
