@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/api/posts/{postId}/reactions")
+@RequestMapping("/api/reactions")
 @CrossOrigin(origins = "*")
 public class ReactionController {
 
@@ -23,8 +23,8 @@ public class ReactionController {
     private UserRepository userRepository;
 
 
-@PostMapping
-public ResponseEntity<?> reactToPost(@PathVariable Long postId, @RequestBody Map<String, String> data) {
+@PostMapping("/")
+public ResponseEntity<?> reactToPost(@RequestBody Map<String, String> data) {
     String username = data.get("username");
     String reactionType = data.get("reaction");
 
