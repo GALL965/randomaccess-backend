@@ -22,26 +22,6 @@ public class ReactionController {
     @Autowired
     private UserRepository userRepository;
 
-    @PostMapping
-    public ResponseEntity<?> reactToPost(@PathVariable Long postId, @RequestBody Map<String, String> body) {
-        String username = body.get("username");
-        String reactionType = body.get("reaction");
-
-        Optional<Post> optionalPost = postRepository.findById(postId);
-        Optional<User> optionalUser = userRepository.findByEmail(username); // correo usado como username
-
-        if (optionalPost.isEmpty() || optionalUser.isEmpty()) {
-            return ResponseEntity.badRequest().body("Post o usuario no encontrado");
-        }
-
-        Reaction reaction = new Reaction();
-        reaction.setPost(optionalPost.get());
-        reaction.setUser(optionalUser.get());
-        reaction.setType(EReaction.valueOf(reactionType));
-
-        reactionRepository.save(reaction);
-        return ResponseEntity.ok().body("Reacción registrada");
-    }
 
     @GetMapping
     public ResponseEntity<List<Reaction>> getReactionsForPost(@PathVariable Long postId) {
