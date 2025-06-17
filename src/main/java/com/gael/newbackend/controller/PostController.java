@@ -73,14 +73,12 @@ public class PostController {
     }
 
 @GetMapping("/{postId}/reactions/count")
-public Map<EReaction, Long> getReactionCounts(@PathVariable Long postId) {
-    List<Object[]> rawCounts = reactionRepository.countReactionsByPostId(postId);
-    Map<EReaction, Long> counts = new java.util.HashMap<>();
-
-    for (Object[] row : rawCounts) {
-        counts.put((EReaction) row[0], (Long) row[1]);
+public Map<String, Long> getReactionCounts(@PathVariable Long postId) {
+    List<Object[]> result = reactionRepository.countReactionsByPostId(postId);
+    Map<String, Long> counts = new java.util.HashMap<>();
+    for (Object[] row : result) {
+        counts.put(row[0].toString(), (Long) row[1]);
     }
-
     return counts;
 }
 
