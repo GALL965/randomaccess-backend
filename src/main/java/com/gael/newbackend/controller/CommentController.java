@@ -31,11 +31,14 @@ public void init() {
     private UserRepository userRepo;
 
 @PostMapping
-public Comment addComment(@RequestBody CommentRequest request) {
-    System.out.println("Intentando guardar comentario: " + request.getContent());
+public Comment addComment(@RequestBody Map<String, String> data) {
+    System.out.println("Intentando guardar comentario: " + data.get("content"));
 
-    var user = userRepo.findById(request.getUserId()).orElse(null);
-    var post = postRepo.findById(request.getPostId()).orElse(null);
+    Long userId = Long.parseLong(data.get("userId"));
+    Long postId = Long.parseLong(data.get("postId"));
+
+    var user = userRepo.findById(userId).orElse(null);
+    var post = postRepo.findById(postId).orElse(null);
 
     if (user == null || post == null) {
         System.out.println("User o Post no encontrado");
@@ -43,7 +46,7 @@ public Comment addComment(@RequestBody CommentRequest request) {
     }
 
     Comment comment = new Comment();
-    comment.setContent(request.getContent());
+    comment.setContent(data.get("content"));
     comment.setUser(user);
     comment.setPost(post);
 
