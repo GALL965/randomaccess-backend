@@ -72,7 +72,7 @@ public class PostController {
         reactionRepository.deleteByUserAndPost(user, post);
     }
 
-    @GetMapping("/{postId}/reactions/count")
+@GetMapping("/{postId}/reactions/count")
 public Map<EReaction, Long> getReactionCounts(@PathVariable Long postId) {
     List<Object[]> rawCounts = reactionRepository.countReactionsByPostId(postId);
     Map<EReaction, Long> counts = new java.util.HashMap<>();
@@ -83,5 +83,6 @@ public Map<EReaction, Long> getReactionCounts(@PathVariable Long postId) {
 
     return counts;
 }
+
 
 }

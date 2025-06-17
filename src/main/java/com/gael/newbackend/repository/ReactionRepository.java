@@ -3,6 +3,7 @@ package com.gael.newbackend.repository;
 import java.util.List;
 import java.util.Map; // ← AÑADE ESTO
 import com.gael.newbackend.model.EReaction; // ← AÑADE ESTO
+import com.gael.newbackend.model.User;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
