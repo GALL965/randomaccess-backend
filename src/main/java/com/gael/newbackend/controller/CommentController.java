@@ -32,7 +32,9 @@ public void init() {
 
 @PostMapping
 public Comment addComment(@RequestBody Map<String, String> data) {
-    System.out.println("Intentando guardar comentario: " + data.get("content"));
+    System.out.println("Recibiendo comentario: " + data.get("content"));
+    System.out.println("userId: " + data.get("userId"));
+    System.out.println("postId: " + data.get("postId"));
 
     Long userId = Long.parseLong(data.get("userId"));
     Long postId = Long.parseLong(data.get("postId"));
