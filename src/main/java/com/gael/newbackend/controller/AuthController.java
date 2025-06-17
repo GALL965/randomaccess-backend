@@ -64,7 +64,8 @@ public ResponseEntity<?> login(@RequestBody LoginRequest request) {
                 .signWith(SignatureAlgorithm.HS256, "secreto123".getBytes())
                 .compact();
 
-        return ResponseEntity.ok(Map.of("token", token));
+        // Ahora, también enviamos el userId junto con el token
+        return ResponseEntity.ok(Map.of("token", token, "userId", user.getId()));
     } catch (Exception e) {
         System.out.println(">>> ERROR en login: " + e.getMessage());
         e.printStackTrace();
