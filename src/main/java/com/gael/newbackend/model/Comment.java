@@ -15,9 +15,10 @@ public class Comment {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    @ManyToOne
-    @JsonIgnoreProperties({"email", "password", "roles"})
-    private User user;
+@ManyToOne
+@JoinColumn(name = "user_id")
+@JsonIgnoreProperties({"password", "email", "roles"})
+private User user;
 
     @ManyToOne
     private Post post;
