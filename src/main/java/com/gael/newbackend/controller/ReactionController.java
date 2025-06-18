@@ -64,9 +64,10 @@ public ResponseEntity<?> reactToPost(@RequestBody Map<String, String> data) {
 
 @GetMapping("/user")
 public ResponseEntity<Map<String, String>> getUserReaction(
-        @RequestParam String username,
+        @RequestParam Long userId,
         @RequestParam Long postId) {
-    User user = userRepository.findByEmail(username).orElse(null);
+
+    User user = userRepository.findById(userId).orElse(null);
     Post post = postRepository.findById(postId).orElse(null);
 
     if (user == null || post == null) {
