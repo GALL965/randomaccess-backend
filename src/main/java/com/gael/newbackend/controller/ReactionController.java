@@ -26,39 +26,48 @@ public class ReactionController {
 
 @PostMapping("/")
 public ResponseEntity<?> reactToPost(@RequestBody Map<String, String> data) {
-    Long userId = Long.parseLong(data.get("userId"));
-    String reactionType = data.get("reaction");
-    Long postId = Long.parseLong(data.get("postId"));  // Ahora obtenemos postId del cuerpo de la solicitud
+    try {
+        System.out.println(">>> Datos recibidos:");
+        System.out.println("userId: " + data.get("userId"));
+        System.out.println("reaction: " + data.get("reaction"));
+        System.out.println("postId: " + data.get("postId"));
 
-   User user = userRepository.findById(userId).orElseThrow();
+        Long userId = Long.parseLong(data.get("userId"));
+        String reactionType = data.get("reaction");
+        Long postId = Long.parseLong(data.get("postId"));
 
-    Post post = postRepository.findById(postId).orElseThrow();  // Ahora postId está definido correctamente
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new RuntimeException("Post no encontrado"));
 
-    // Verificar si ya existe una reacción
-    Reaction existingReaction = reactionRepository.findByUserAndPost(user, post);
-    if (existingReaction != null && existingReaction.getType().toString().equals(reactionType)) {
-        // Si la reacción ya existe y es la misma, eliminarla
-        reactionRepository.delete(existingReaction);
-        return ResponseEntity.ok().body("Reacción eliminada.");
+        Reaction existingReaction = reactionRepository.findByUserAndPost(user, post);
+        if (existingReaction != null && existingReaction.getType().toString().equals(reactionType)) {
+            reactionRepository.delete(existingReaction);
+            System.out.println(">>> Reacción existente eliminada");
+            return ResponseEntity.ok().body("Reacción eliminada.");
+        }
+
+        if (existingReaction != null) {
+            reactionRepository.delete(existingReaction);
+            System.out.println(">>> Reacción anterior eliminada");
+        }
+
+        Reaction newReaction = new Reaction();
+        newReaction.setPost(post);
+        newReaction.setUser(user);
+
+        try {
+            newReaction.setType(EReaction.valueOf(reactionType));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Tipo de reacción inválido: " + reactionType);
+        }
+
+        reactionRepository.save(newReaction);
+        System.out.println(">>> Reacción guardada con éxito");
+        return ResponseEntity.ok().body("Reacción registrada.");
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body("Error interno: " + e.getMessage());
     }
-
-    // Si no existe, agregar una nueva
-    if (existingReaction != null) {
-        reactionRepository.delete(existingReaction); // Si tiene otra reacción, la elimina
-    }
-
-    Reaction newReaction = new Reaction();
-    newReaction.setPost(post);
-    newReaction.setUser(user);
-   try {
-    newReaction.setType(EReaction.valueOf(reactionType));
-   } catch (IllegalArgumentException e) {
-    return ResponseEntity.badRequest().body("Tipo de reacción inválido: " + reactionType);
-   }
-
-     
-    reactionRepository.save(newReaction);
-    return ResponseEntity.ok().body("Reacción registrada.");
 }
 
 
