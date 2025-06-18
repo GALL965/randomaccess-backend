@@ -1,11 +1,8 @@
-package com.gael.newbackend.model;
-
-
 public enum EReaction {
     LIKE,
     LOVE,
-    XDDD,
-    WAOS,
+    NOJAO,
     TITE,
-    EWWW
+    WAO,
+    XDDD
 }
