@@ -17,8 +17,8 @@ public class Post {
 @ManyToOne
 @JoinColumn(name = "user_id")
 private User user;
-@OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-@JsonIgnoreProperties({"post", "user"})
+@OneToMany(mappedBy = "posts", cascade = CascadeType.ALL, orphanRemoval = true)
+@JsonIgnoreProperties({"posts", "user"})
 private java.util.List<Comment> comments = new java.util.ArrayList<>();
 
 public java.util.List<Comment> getComments() {
@@ -62,7 +62,7 @@ public void setComments(java.util.List<Comment> comments) {
     public void setUser(User user) { this.user = user; }
 
 @JsonManagedReference
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL, orphanRemoval = true)
 private List<Reaction> reactions = new ArrayList<>();
 
 public List<Reaction> getReactions() {
