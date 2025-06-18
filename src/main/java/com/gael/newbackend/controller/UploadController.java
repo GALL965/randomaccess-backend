@@ -1,7 +1,7 @@
 package com.gael.newbackend.controller;
 
+import com.gael.newbackend.repository.UserRepository;
 import java.util.Map;
-
 import com.gael.newbackend.service.CloudinaryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +15,10 @@ public class UploadController {
 
     @Autowired
     private CloudinaryService cloudinaryService;
+
+@Autowired
+private UserRepository userRepository;
+
 
 @PostMapping
 public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
@@ -38,7 +42,7 @@ public ResponseEntity<Map<String, String>> subirFotoPerfil(
     try {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-        String imageUrl = cloudinaryService.uploadFile(file); // usa tu servicio actual
+        String imageUrl = cloudinaryService.upload(file);
         user.setImageUrl(imageUrl);
         userRepository.save(user);
 
