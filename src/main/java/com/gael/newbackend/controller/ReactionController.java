@@ -25,11 +25,12 @@ public class ReactionController {
 
 @PostMapping("/")
 public ResponseEntity<?> reactToPost(@RequestBody Map<String, String> data) {
-    String username = data.get("username");
+    Long userId = Long.parseLong(data.get("userId"));
     String reactionType = data.get("reaction");
     Long postId = Long.parseLong(data.get("postId"));  // Ahora obtenemos postId del cuerpo de la solicitud
 
-    User user = userRepository.findByEmail(username).orElseThrow();
+   User user = userRepository.findById(userId).orElseThrow();
+
     Post post = postRepository.findById(postId).orElseThrow();  // Ahora postId está definido correctamente
 
     // Verificar si ya existe una reacción
