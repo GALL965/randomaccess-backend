@@ -26,4 +26,29 @@ public ResponseEntity<?> uploadImage(@RequestParam("file") MultipartFile file) {
     }
 }
 
+
+
+
+
+@PostMapping("/upload/profile/{userId}")
+public ResponseEntity<Map<String, String>> subirFotoPerfil(
+        @PathVariable Long userId,
+        @RequestParam("image") MultipartFile file) {
+
+    try {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+
+        String imageUrl = cloudinaryService.uploadFile(file); // usa tu servicio actual
+        user.setImageUrl(imageUrl);
+        userRepository.save(user);
+
+        return ResponseEntity.ok(Map.of("imageUrl", imageUrl));
+    } catch (Exception e) {
+        e.printStackTrace();
+        return ResponseEntity.status(500).body(Map.of("error", "Error al subir imagen"));
+    }
+}
+
+
+
 }
