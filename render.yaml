@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: randomaccess-backend
+    env: java
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/randomaccess-backend-0.0.1-SNAPSHOT.jar
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromService:
+          name: randomaccess-backend
+          type: environment
+      - key: SPRING_DATASOURCE_USERNAME
+        fromService:
+          name: randomaccess-backend
+          type: environment
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromService:
+          name: randomaccess-backend
+          type: environment
+      - key: SPRING_PROFILES_ACTIVE
+        value: default
