@@ -48,8 +48,13 @@ public ResponseEntity<?> reactToPost(@RequestBody Map<String, String> data) {
     Reaction newReaction = new Reaction();
     newReaction.setPost(post);
     newReaction.setUser(user);
+   try {
     newReaction.setType(EReaction.valueOf(reactionType));
+   } catch (IllegalArgumentException e) {
+    return ResponseEntity.badRequest().body("Tipo de reacción inválido: " + reactionType);
+   }
 
+     
     reactionRepository.save(newReaction);
     return ResponseEntity.ok().body("Reacción registrada.");
 }
